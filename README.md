@@ -1,27 +1,15 @@
 # portofvirginia
 
-### Question
+## Check to See If You Have Python 3 Installed
+
+python --version
 
 
 
-### Hypothesis
+## Run These Commands to Use This Program
 
-
-
-### Data Sources
-
-
-
-### Data Descriptions
-
-
-
-### Steps
-
-
-
-### Conclusion
-
-
-
-
+virtualenv -p /usr/local/bin/python3 venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+python main.py
