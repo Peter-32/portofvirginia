@@ -6,10 +6,10 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.app import App
-import pyperclip as clip
 import subprocess
 from datetime import datetime
-
+import pyperclip as clip
+import os
 
 class GuiApp(App):
     my_string = StringProperty('default')
@@ -21,10 +21,22 @@ class GuiApp(App):
 
     def get_url(self, instance):
         pass
+        url = "http://propassva.portofvirginia.com/api/gate?startDateTime={}T07:00:00.000Z&endDateTime={}T07:00:00.000Z&licensePlate={}".\
+            format(self.start_date.text, self.end_date.text, self.license_plate.text)
+        clip.copy(url)
+        # copied_text = clip.paste()
 
     def json_to_csv(self, instance):
-        pass
+        # Make JSON
+        file = open("data.json", "w")
+        file.write(clip.paste())
+        file.close()
 
+        # JSON to CSV
+        run_command('in2csv "data.json" > "data.csv"')
+
+        # Remove JSON
+        os.remove("data.json")
 
     def build(self):
         root = Accordion(orientation='vertical')
