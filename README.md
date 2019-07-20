@@ -10,8 +10,13 @@
 - sudo apt-get install python3-pip
   - If that command didn't work install this and run from this program: https://gitforwindows.org/
 - pip3 install --upgrade pip
+
+## Change directory to the downloaded portofvirginia
+
+- cd ~/Desktop/portofvirginia
 - pip3 install -r requirements.txt
 
 ## Run This Command to Run the Program
 
+- cd ~/Desktop/portofvirginia
 - python3 main.py
