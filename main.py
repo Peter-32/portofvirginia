@@ -10,6 +10,38 @@ import subprocess
 from datetime import datetime
 import pyperclip as clip
 import os
+import pyautogui as g
+
+from time import sleep
+g.FAILSAFE = True
+sleep(2)
+g.size()
+g.position()
+
+def c():
+    g.mouseDown()
+    g.mouseUp()
+
+def c2():
+    c()
+    c()
+
+def rc():
+    g.click(button='right')
+
+def select_all_and_copy():
+    rc()
+    g.keyDown('a')
+    g.keyUp('a')
+    g.keyDown('ctrl')
+    g.keyDown('c')
+    g.keyUp('c')
+    g.keyUp('ctrl')
+
+
+
+
+
 
 class GuiApp(App):
     my_string = StringProperty('default')
@@ -17,7 +49,41 @@ class GuiApp(App):
     end_date = None
     license_plate = None
     table_name = None
+    i = 1
 
+
+    def get_urls_and_json_to_csv(self, instance):
+        for license_plate in self.license_plate.text.split(","):
+            license_plate = license_plate.strip()
+            g.moveTo(12, 632)
+            c()
+            g.keyDown('command')
+            g.keyDown('t')
+            g.keyUp('command')
+            g.keyUp('t')
+            sleep(0.3)
+            import pyperclip as clip
+            clip.copy("http://propassva.portofvirginia.com/api/gate?startDateTime={}T07:00:00.000Z&endDateTime={}T07:00:00.000Z&licensePlate={}".\
+                        format(self.start_date.text, self.end_date.text, license_plate))
+            sleep(0.3)
+            g.keyDown('command')
+            g.keyDown('v')
+            g.keyUp('command')
+            g.keyUp('v')
+            sleep(0.1)
+            g.keyDown('enter')
+            g.keyUp('enter')
+            sleep(0.1)
+            c()
+            sleep(0.1)
+            g.keyDown('command')
+            g.keyDown('a')
+            g.keyUp('a')
+            sleep(0.05)
+            g.keyDown('c')
+            g.keyUp('c')
+            g.keyUp('command')
+            self.json_to_csv(None)
 
     def get_url(self, instance):
         pass
@@ -33,7 +99,8 @@ class GuiApp(App):
         file.close()
 
         # JSON to CSV
-        run_command('in2csv "data.json" > "data.csv"')
+        run_command('in2csv "data.json" > "data{}.csv"'.format(self.i))
+        self.i = self.i + 1
 
         # Remove JSON
         os.remove("data.json")
@@ -59,7 +126,7 @@ class GuiApp(App):
         self.end_date = TextInput(text=datetime.now().strftime("%Y-%m-%d"))
         input2.add_widget(self.end_date)
         input3.add_widget(Label(text='License Plate:'))
-        self.license_plate = TextInput(text="UN11316")
+        self.license_plate = TextInput(text="UN11316,UN11316,UN11316")
         input3.add_widget(self.license_plate)
         buttons = GridLayout(cols=1)
         button = Button(
@@ -69,6 +136,10 @@ class GuiApp(App):
         button = Button(
             text="JSON to CSV", font_size=24)
         button.bind(on_press=self.json_to_csv)
+        buttons.add_widget(button)
+        button = Button(
+            text="List of Licenses to CSV", font_size=24)
+        button.bind(on_press=self.get_urls_and_json_to_csv)
         buttons.add_widget(button)
         page.add_widget(subpage)
         subpage.add_widget(input1)
