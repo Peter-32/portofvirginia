@@ -26,10 +26,10 @@ def select_all_and_copy():
     rc()
     g.keyDown('a')
     g.keyUp('a')
-    g.keyDown('command')
+    g.keyDown('ctrl')
     g.keyDown('c')
     g.keyUp('c')
-    g.keyUp('command')
+    g.keyUp('ctrl')
 
 def json_to_csv(license_plate):
     # Make JSON
@@ -61,17 +61,17 @@ def main():
         license_plate = row['license_plate']
         g.moveTo(12, 632)
         c()
-        g.keyDown('command')
+        g.keyDown('ctrl')
         g.keyDown('t')
-        g.keyUp('command')
+        g.keyUp('ctrl')
         g.keyUp('t')
         sleep(0.3)
         clip.copy("http://propassva.portofvirginia.com/api/gate?startDateTime={}T07:00:00.000Z&endDateTime={}T07:00:00.000Z&licensePlate={}".\
                     format(start_date, end_date, license_plate))
         sleep(0.3)
-        g.keyDown('command')
+        g.keyDown('ctrl')
         g.keyDown('v')
-        g.keyUp('command')
+        g.keyUp('ctrl')
         g.keyUp('v')
         sleep(0.1)
         g.keyDown('enter')
@@ -79,13 +79,13 @@ def main():
         sleep(3.0)
         c()
         sleep(3.0)
-        g.keyDown('command')
+        g.keyDown('ctrl')
         g.keyDown('a')
         g.keyUp('a')
         sleep(0.5)
         g.keyDown('c')
         g.keyUp('c')
-        g.keyUp('command')
+        g.keyUp('ctrl')
         json_to_csv(license_plate)
 
 
