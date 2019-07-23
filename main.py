@@ -1,6 +1,7 @@
 import os
 import subprocess
 import pandas as pd
+import pyautogui as g
 from time import sleep
 import pyperclip as clip
 from datetime import datetime
@@ -25,12 +26,12 @@ def select_all_and_copy():
     rc()
     g.keyDown('a')
     g.keyUp('a')
-    g.keyDown('ctrl')
+    g.keyDown('command')
     g.keyDown('c')
     g.keyUp('c')
-    g.keyUp('ctrl')
+    g.keyUp('command')
 
-def json_to_csv(self):
+def json_to_csv(license_plate):
     # Make JSON
     file = open("data.json", "w")
     file.write(clip.paste())
@@ -38,8 +39,7 @@ def json_to_csv(self):
 
     try:
         # JSON to CSV
-        run_command('in2csv "data.json" > "data{}.csv"'.format(self.i))
-        self.i = self.i + 1
+        run_command('in2csv "data.json" > "output/{}_data.csv"'.format(license_plate))
 
         # Remove JSON
         os.remove("data.json")
@@ -55,23 +55,23 @@ def run_command(command):
 def main():
     i = 1
     df = pd.read_csv("input.csv")
-    for row in df.iterrows():
+    for index, row in df.iterrows():
         start_date = row['start_date']
         end_date = row['end_date']
         license_plate = row['license_plate']
         g.moveTo(12, 632)
         c()
-        g.keyDown('ctrl')
+        g.keyDown('command')
         g.keyDown('t')
-        g.keyUp('ctrl')
+        g.keyUp('command')
         g.keyUp('t')
         sleep(0.3)
         clip.copy("http://propassva.portofvirginia.com/api/gate?startDateTime={}T07:00:00.000Z&endDateTime={}T07:00:00.000Z&licensePlate={}".\
                     format(start_date, end_date, license_plate))
         sleep(0.3)
-        g.keyDown('ctrl')
+        g.keyDown('command')
         g.keyDown('v')
-        g.keyUp('ctrl')
+        g.keyUp('command')
         g.keyUp('v')
         sleep(0.1)
         g.keyDown('enter')
@@ -79,14 +79,14 @@ def main():
         sleep(3.0)
         c()
         sleep(3.0)
-        g.keyDown('ctrl')
+        g.keyDown('command')
         g.keyDown('a')
         g.keyUp('a')
         sleep(0.5)
         g.keyDown('c')
         g.keyUp('c')
-        g.keyUp('ctrl')
-        self.json_to_csv()
+        g.keyUp('command')
+        json_to_csv(license_plate)
 
 
 #Execute the application
