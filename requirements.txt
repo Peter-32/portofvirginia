@@ -1,4 +1,3 @@
-pyforms
+pandas
 pyperclip
 csvkit
-pyautogui
